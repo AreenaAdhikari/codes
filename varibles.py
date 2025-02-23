@@ -7,5 +7,5 @@ codingal = "codingal"
 print(codingal)
 
 name = input("enter your name:")
-print(f"Debug: {name}")
+
 print("\nWelcome ",name ,"\nWelcome to codingal")
