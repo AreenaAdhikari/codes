@@ -1,3 +1,3 @@
 i = 0
 while i<=0:
-    print("I WILL RUN FOREVER")
+    print("I wILL Run FOREVER")
