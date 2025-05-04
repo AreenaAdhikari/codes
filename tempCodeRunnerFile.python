@@ -1,14 +1,7 @@
-setx = {"green","blue"}
-sety = {"yellow","blue"}
-print("Original set elements : ")
-print(setx)
-print(sety)
-print("/nIntersection of 2 elements sets: ")
-setz = setx.intersection(sety)
-setv = setx.union(sety)
-setw = setx.difference(sety)
-setadc = setx.symmetric_difference(sety)
-print(setz)
-print(setv)
-print(setw)
-print(setadc)
+import array as arr
+array_num = arr.array('i',[1,2,3,4,9,3,5,3])
+print("Original array :"+str(array_num))
+print("Number of occurences of 3 in list :" +str(array_num.count(3)))
+array_num.reverse()
+print("Reverse the order of the numbers: ")
+print(str(array_num))
