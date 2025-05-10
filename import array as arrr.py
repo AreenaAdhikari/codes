@@ -1,0 +1,11 @@
+import array as arr
+array_a = arr.array('i',[12,84,12,84,76,96,8,8,15])
+print(array_a)
+array_a.reverse()
+print(array_a)
+array_a.remove(96)
+print(array_a)
+array_a.pop(4)
+print(array_a)
+array_a.clear()
+print(array_a)
