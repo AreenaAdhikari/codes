@@ -5,5 +5,5 @@ class myClass:
     def __hello(self):
         print("Private varible value :",myClass.__privateVar)
 foo = myClass()
-foo.hello()
+foo.__hello()
 foo.__privteMeth()
