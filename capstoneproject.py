@@ -1,0 +1,26 @@
+import pandas as pd
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+df = pd.read_csv('abc.csv')
+print(df.shape)
+print(df.head())
+print(df.tail())
+print(df.isnull().sum())
+print(df.describe())
+print(df.describe(include='all').T)
+print(df.dtypes)
+corr_matrix = df.select_dtypes(include='number').corr()
+print(corr_matrix)
+sns.heatmap(corr_matrix, cmap='Wistia', annot=True)
+plt.show()
+df.hist(figsize=(12,8))
+plt.show()
+df.plot(kind='box', subplots=True,Layout=(3,2), sharex=False,sharey=False,figsize=(8,12))
+plt.show()
+print(df.sex.value_counts())
+print(df.island.value_counts())
+print(df.species.value_counts())
+sns.countplot(data=df, x='sex' , pallete='summer')
+sns.countplot(data=df,x='island', pallete='RdPu')
+sns.countplot(data=df,x='species', pallete='YlOrRd')
