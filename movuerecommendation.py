@@ -16,41 +16,51 @@ def load_data(path='imdb_top_1000.csv'):
 
 movies = load_data()
 tfidf = TfidfVectorizer(stop_words='english')
-cosine_sim = cosine_similarity(tfidf.fit_transform(movies['combined']))
+tfidf_matrix = tfidf.fit_transform(movies['combined'])
+cosine_sim = cosine_similarity(tfidf_matrix)
 
 def list_genres(df): return sorted({g.strip() for x in df['Genre'].dropna() for g in x.split(',')})
 genres = list_genres(movies)
 
 
 def recommend(genre=None, mood=None, rating=0, top_n=5):
-    df = movies
+    df = movies.copy()
     if genre: df = df[df['Genre'].str.contains(genre, case=False, na=False)]
     if rating: df = df[df['IMDB_Rating'] >= rating]
     df = df.sample(frac=1)
-    recs = [(r['Series_Title'], TextBlob(r['Overview']).sentiment.polarity)
-            for _, r in df.iterrows() if not mood or TextBlob(mood).sentiment.polarity * TextBlob(r['Overview']).sentiment.polarity >= 0]
-    return recs[:top_n] or "No suitable movie recommendations found."
+    recs = []
+    for _, r in df.iterrows():
+        if not mood:
+            recs.append((r['Series_Title'], TextBlob(r['Overview']).sentiment.polarity))
+        else:
+            movie_sentiment = TextBlob(r['Overview']).sentiment.polarity
+            mood_sentiment = TextBlob(mood).sentiment.polarity
+            if mood_sentiment * movie_sentiment >= 0:
+                recs.append((r['Series_Title'], movie_sentiment))
+    return recs[:top_n] if recs else "No suitable movie recommendations found."
 
 def show(recs, name):
-    print(Fore.YELLOW + f"\n🎬 AI Recommendations for {name}:")
-    for t, p in recs: print(f"- {t} ({'Positive' if p>0 else 'Negative' if p<0 else 'Neutral'})")
-
+    if isinstance(recs, str):
+        print(Fore.RED + recs)
+        return
+    print(Fore.YELLOW + f"\n AI Recommendations for {name}:")
+    for t, p in recs: 
+        sentiment = 'Positive' if p > 0 else 'Negative' if p < 0 else 'Neutral'
+        print(f"- {t} ({sentiment})")
 
 def main():
-    print(Fore.BLUE + "🤖 Welcome to AI Movie Assistant!\n")
+    print(Fore.BLUE + " Welcome to AI Movie Assistant!\n")
     name = input(Fore.YELLOW+"Your name: ").strip()
     print(Fore.GREEN+f"Great to meet you, {name}!\n\nAvailable Genres:")
     [print(f"{i+1}. {g}") for i,g in enumerate(genres)]
-    
     while True:
-        g = input(Fore.YELLOW+"Pick genre (or press Enter to skip): ").strip()
+        g = input(Fore.YELLOW+"choose genre (or press enter to skip): ").strip()
         g = g if g in genres else None
         mood = input(Fore.YELLOW+"Mood (describe how you feel): ").strip()
-        r = input(Fore.YELLOW+"Minimum rating (0-10, default 0): ").strip()
-        r = float(r) if r.isdigit() else 0
+        r = input(Fore.YELLOW+"Minimum rating (0-10): ").strip()
+        r = float(r) if r.replace('.', '').isdigit() else 0
         show(recommend(g, mood, r), name)
         
         if input(Fore.YELLOW+"\nMore recommendations? (yes/no): ").lower()!="yes":
-            print(Fore.GREEN+f"Enjoy your movies, {name}! 🍿"); break
-
+            print(Fore.GREEN+f"Enjoy your movie, {name}! "); break
 if __name__=="__main__": main()
