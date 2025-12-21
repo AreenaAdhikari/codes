@@ -24,7 +24,7 @@ def get_image_tags(image_path,limit=10):
 def generate_caption(tags):
     return trucated_text(",".join(tags),5)
 def generate_description(tags):
-    sentence=(
+    sentence=?
         f"this scene shows{tags[0]}."
         f"it includes elements such as {",".join(tags[1:6])}."
         f"this scene appears visually clear and well composed"
