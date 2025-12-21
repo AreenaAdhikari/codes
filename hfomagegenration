@@ -1,0 +1,33 @@
+import requests
+from PIL import Image
+from io import BytesIO
+from config import hf_api_key
+ 
+API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-3-medium-diffusers"
+def generate_image_from_text(prompt: str) -> Image.Image:
+    """Sent a text prompt to hugging face and get generated image"""
+    headers = {"Authorization": f"Bearer {hf_api_key}"}
+    payload = {"inputs": prompt}
+    try:
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=30)
+        response.raise_for_status()
+
+        if "image" in response.headers.get("Content-Type", ""):
+            image = Image.open(BytesIO(response.content))
+            return image
+        else:
+            raise Exception("response not an image, api may have sent an error message")
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"Failed request: {e}")
+
+def main():
+    """Main loop for user interaction, 
+    for text to image generation
+    """
+    print("welcome to text-to-image generator")
+    print("type exit to quit")
+    while True:
+        prompt = input("Enter a description for the image you want to generate: \n").strip()
+        if prompt.lower() == "exit":
+            print("Goodbye")
+            break

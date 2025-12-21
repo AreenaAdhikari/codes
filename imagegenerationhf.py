@@ -1,5 +1,5 @@
 import requests
-from PIL import images
+from PIL import Images
 from io import BytesIO
 from config import hf_api_key
  
