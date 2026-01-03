@@ -37,6 +37,7 @@ def generate_summary(tags):
         f"The objects are clearly distinguisable and from a meningfull scene"
         f"the image is a beautiful repersentation which is stunning"
     )
+    return trucated_text(sentence,50)
 def print_menu():
     print(f"""{Style.BRIGHT}{Fore.GREEN}
           Select one of these following outputs:
