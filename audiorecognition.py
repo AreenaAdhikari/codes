@@ -6,7 +6,7 @@ CHUNK = 1024
 
 def record(seconds):
     p = pyaudio.PyAudio()
-    stream = p.open(format=pyaudio.paINT16,channels = 1,
+    stream = p.open(format=pyaudio.paInt16,channels = 1,
                     rate = RATE  ,input=True, frames_per_buffer=CHUNK )
     
     frames = [stream.read(CHUNK)for _ in range(int(RATE / CHUNK * seconds))]
