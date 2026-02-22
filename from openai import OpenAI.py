@@ -1,0 +1,51 @@
+from openai import OpenAI
+import config
+import time
+
+client = OpenAI(api_key=config.Open_AI_KEY)
+
+def generate_response(prompt):
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful Ai assistant"},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return (
+            "\n Open ai error occurred .\n"
+            "Please check Api key or internet connection.\n"
+        )
+
+def silly_prompt():
+    print("="*60)
+    print("AI PROMPT ENGENEERING TUTORIAL")
+    print("clarity,specifically and context")
+    print("="*60)
+    
+    vague_prompt = input("\n Give a vague prompt (eg : tell me how technology works): ")
+    print("Your vague prompt: ", vague_prompt)
+    print("Ai response : ")
+    print(generate_response(vague_prompt))
+    specific_prompt = input("\n More specifically (eg. tell me how ai works in education) : ")
+    print("Your specific response: ", specific_prompt)
+    print("Ai response:")
+    print(generate_response(specific_prompt))
+
+    contextual_prompt = input("\n Add context (role, audience,purpose): ")
+    print("\n Your contextual prompt :", contextual_prompt)
+    print("Ai response: ")
+    print(generate_response(contextual_prompt))
+
+    print("\n" + "-" * 60)
+    print("REFLECTION QUESTIONS:")
+    print("1. how did the response improve with specificity?")
+    print("2.How did context make the answer more useful")
+    print("3. which prompt gave the best answer and why?")
+    print("-"*60)
+
+if __name__ == "__main__":
+    silly_prompt()
